@@ -1,6 +1,6 @@
 {
   "name": "udp-hub",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An abstraction of the dgram module that is IPv4/v6 agnostic.",
   "main": "udp-hub.js",
   "scripts": {
@@ -10,5 +10,13 @@
     "udp"
   ],
   "author": "Nate Watson <natewatson999@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natewatson999/udp-hub.git"
+  },
+  "bugs": {
+    "url": "https://github.com/natewatson999/udp-hub/issues"
+  },
+  "homepage": "https://github.com/natewatson999/udp-hub#readme"
 }
