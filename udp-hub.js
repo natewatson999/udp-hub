@@ -11,17 +11,18 @@ function createSocket(callback){
 	return this.emitter;
 };
 createSocket.prototype.bind = function(port, callback){
+	var self = this;
 	server4.on("message", function(message, remote){
-		this.emmiter.emit("message", message, remote)
+		self.emmiter.emit("message", message, remote)
 	});
 	server6.on("message", function(message, remote){
-		this.emmiter.emit("message", message, remote)
+		self.emmiter.emit("message", message, remote)
 	});
 	this.server4.on("listening", function(){
-		this.server6.on("listening", function(){
-			this.emitter.emit("listening");
+		self.server6.on("listening", function(){
+			self.emitter.emit("listening");
 		});
-		this.server6.bind({
+		self.server6.bind({
 			port: port,
 			address: "::0",
 			exclusive: false	
