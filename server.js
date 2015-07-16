@@ -41,7 +41,7 @@ createServer.prototype.send = function(content, start, end, port, address, callb
 		}
 	}
 };
-var send = function(content, start, end, port, address, callback){
+var createClient = function(content, start, end, port, address, callback){
 	if(ipFormat(address) == "IPv6") {
 		var client6 = dgram.createSocket("udp6");
 		client6.on("message", function(content, metaData) {
@@ -50,19 +50,22 @@ var send = function(content, start, end, port, address, callback){
 		});
 		client6.send(content, start, end, port, address);
 	} else {
-		var client6 = dgram.createSocket("udp4");
+		var client4 = dgram.createSocket("udp4");
 		client4.on("message", function(content, metaData) {
 			client4.close();
 			callback(content, metaData);
 		});
 		client4.send(content, start, end, port, address);		
 	}
+	return;
 };
 var server = {};
 server.createServer = function(callback){
 	return new createServer(callback);
 };
-server.createClient = send;
+server.createClient = function(content, start, end, port, address, callback) {
+	return new createClient(content, start, end, port, address, callback);
+}
 server.ipFormat = function(address) {
 	return ipFormat(address);
 };
