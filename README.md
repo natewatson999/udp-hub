@@ -23,8 +23,3 @@ npm install -g udp-hub
 
 ## Usage instructions
 
-### udpHub.createSocket()
-
-### socket.on("listening", function(){})
-
-### socket.on("message", function(message, remote){})

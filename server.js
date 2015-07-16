@@ -8,13 +8,8 @@ var ipFormat = function(address) {
 };
 var createServer = function(callback){
 	var self = this;
-	this.server6 = dgram.createSocket("udp6", function(){
-		if (callback) {
-			self.server4 = dgram.createSocket("udp4", callback);
-		} else {
-			self.server4 = dgram.createSocket("udp4");		
-		}
-	});
+	this.server6 = dgram.createSocket("udp6", callback);
+	this.server4 = dgram.createSocket("udp4", callback);
 };
 createServer.prototype.bind = function(port, callback){
 	var self = this;
