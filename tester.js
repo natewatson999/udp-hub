@@ -7,6 +7,8 @@ var now = function() {
 var udpserver = udp.createServer(function(msg, rinfo) {
   var daytime = now();
   udpserver.send(daytime, 0, daytime.length, rinfo.port, rinfo.address);
+  console.dir(rinfo);
+  console.log(msg);
 });
 udpserver.bind(port);
 var message = new Buffer(" ");
