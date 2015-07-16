@@ -1,8 +1,8 @@
 {
   "name": "udp-hub",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "An abstraction of the dgram module that is IPv4/v6 agnostic.",
-  "main": "udp-hub.js",
+  "main": "exports.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
