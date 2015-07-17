@@ -36,7 +36,7 @@ createServer.prototype.send = function(content, start, end, port, address, callb
 		}
 	}
 };
-createServer.prototype.close(callback){
+createServer.prototype.close = function(callback) {
 	this.server6.close();
 	this.server4.close();
 	if (callback) {

@@ -13,7 +13,11 @@ var udpserver = udp.createServer(function(msg, rinfo) {
 udpserver.bind(port);
 var message = new Buffer(" ");
 var server_ip = '127.0.0.1';
-var standardClient = udp.createClient(message, 0, message.length, port, server_ip, function(message, info){
+var standardClient = udp.createClient(message, 0, message.length, port, server_ip, function(message, info, err){
+	if(err) {
+		console.log(err);
+		return;
+	}
 	console.log(message.toString());
 	console.dir(info);
 	udpserver.close();

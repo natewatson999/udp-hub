@@ -1,6 +1,6 @@
 {
   "name": "udp-hub",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "An abstraction of the dgram module that is IPv4/v6 agnostic.",
   "main": "exports.js",
   "scripts": {
