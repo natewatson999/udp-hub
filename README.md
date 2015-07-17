@@ -57,7 +57,7 @@ server.bind(666);
 
 ### udpHub.createClient
 
-This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; end, the ending index of the buffer; port, the port the server is supposed to get the message on; address, the intended target "IP only"; and callback, the procedure for dealing with the response, if one comes through. The parameters of callback are the actual message, which can be treated as a string; and info, which is a javascript object with the following attributes: address, family, port, and size.
+This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; end, the ending index of the buffer; port, the port the server is supposed to get the message on; address, the intended target "IP only"; and callback, the procedure for dealing with the response, if one comes through. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
 
 #### Client Example:
 

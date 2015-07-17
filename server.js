@@ -51,12 +51,20 @@ var createClient = function(content, start, end, port, address, callback){
 			client6.close();
 			callback(content, metaData);
 		});
+		client6.on("error", function(err){
+			client6.close();
+			callback("", {address: "::0", family: "IPv6", port: 0, size: 0 }, err);
+		});
 		client6.send(content, start, end, port, address);
 	} else {
 		var client4 = dgram.createSocket("udp4");
 		client4.on("message", function(content, metaData) {
 			client4.close();
 			callback(content, metaData);
+		});
+		client4.on("error", function(err){
+			client4.close();
+			callback("", {address: "0.0.0.0", family: "IPv4", port: 0, size: 0 }, err);
 		});
 		client4.send(content, start, end, port, address);		
 	}
