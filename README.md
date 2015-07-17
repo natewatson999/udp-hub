@@ -35,6 +35,10 @@ This function binds this server to a port, with an optional callback. There are 
 
 This function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the ending index of the response, the response port number, and the IP address "v6 and v4 are both valid" of the intended client.
 
+#### udpHub.createServer.close
+
+This function closes a server. It has one parameter: an optional parameter-less callback function.
+
 #### Server Example:
 
 ```
@@ -44,6 +48,9 @@ var server = udp.createServer(function(message, client){
 	console.dir(client);
 	var response = new Buffer(" \r\n");
 	server.send(response, 0, response.length, 666, client.address);
+	if(message=="close") {
+		server.close();
+	}
 });
 server.bind(666);
 ```

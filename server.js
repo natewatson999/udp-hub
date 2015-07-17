@@ -36,6 +36,14 @@ createServer.prototype.send = function(content, start, end, port, address, callb
 		}
 	}
 };
+createServer.prototype.close(callback){
+	this.server6.close();
+	this.server4.close();
+	if (callback) {
+		callback();
+	}
+	return;
+}
 var createClient = function(content, start, end, port, address, callback){
 	if(ipFormat(address) == "IPv6") {
 		var client6 = dgram.createSocket("udp6");

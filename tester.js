@@ -16,4 +16,5 @@ var server_ip = '127.0.0.1';
 var standardClient = udp.createClient(message, 0, message.length, port, server_ip, function(message, info){
 	console.log(message.toString());
 	console.dir(info);
+	udpserver.close();
 });
