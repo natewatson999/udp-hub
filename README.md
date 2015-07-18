@@ -1,5 +1,5 @@
 # udp-hub
-UDP-hub is a Node.js module designed to provide a module similar to the dgram module that Node provides natively, with the only difference being that dgram requires the developer to handle IPv4 and IPv6, whearas upd-hub is supposed to allow the developer to handle them as one. So rather than making two servers, one for IPv4, and one for IPv6; you can just make one server that can handle both. Note that everything in this module is based on IP addresses. There is no support for domain names or NIC addresses. These features will come later. 
+UDP-hub is a Node.js module designed to provide a module similar to the dgram module that Node provides natively, with the only difference being that dgram requires the developer to handle IPv4 and IPv6, whearas upd-hub is supposed to allow the developer to handle them as one. So rather than making two servers, one for IPv4, and one for IPv6; you can just make one server that can handle both. Note that everything in this module is based on IP addresses. There is no internal support for domain names or NIC addresses. However, there is a set of functions for getting IP addresses from domain names, and a future version will have MAC address support. 
 
 This module is published under the MIT license. A working example that uses the basic features can be found in tester.js.
 
@@ -64,8 +64,31 @@ This function takes a message, information about it, sends it, and executes a ca
 ```
 var udp = require("udp-hub");
 var message = new Buffer(" \r\n");
-var client = udp.createClient(message, 0, message.length, 666, 127.0.0.1, function(message, info){
+var client = udp.createClient(message, 0, message.length, 666, 127.0.0.1, function(message, info, err){
+	if(err) {
+		console.log(err);
+		return;
+	}
 	console.log(message.toString());
 	console.dir(info);
 });
 ```
+
+### Domain Name related functions
+
+#### udpHub.ipFormat
+
+This function takes a valid IP address in string form, and returns either "IPv6" or "IPv4".
+
+#### udpHub.get6Addresses
+
+This function takes a valid domain name, and calls a callback function whose parameter is an array of length zero or more, where each value is an IPv6 address associated to the domain in question.
+
+#### udpHub.get4Addresses
+
+This function takes a valid domain name, and calls a callback function whose parameter is an array of length zero or more, where each value is an IPv4 address associated to the domain in question.
+
+#### udpHub.getAddresses
+
+This function takes a valid domain name, and calls a callback function whose parameter is an array of length zero or more, where each value is an IP address associated to the domain in question.
+

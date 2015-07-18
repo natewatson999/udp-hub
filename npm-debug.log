@@ -1,0 +1,96 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\iojs\\node.exe',
+1 verbose cli   'C:\\Program Files\\iojs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish' ]
+2 info using npm@2.12.1
+3 info using node@v2.3.4
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec { raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: 'C:\\Users\\Nate\\Desktop\\fit\\IntroSE\\datagramHub\\udp-hub',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory C:\Users\Nate\AppData\Roaming\npm-cache\udp-hub\0.2.5\package.tgz not in flight; packing
+9 verbose tar pack [ 'C:\\Users\\Nate\\AppData\\Roaming\\npm-cache\\udp-hub\\0.2.5\\package.tgz',
+9 verbose tar pack   'C:\\Users\\Nate\\Desktop\\fit\\IntroSE\\datagramHub\\udp-hub' ]
+10 verbose tarball C:\Users\Nate\AppData\Roaming\npm-cache\udp-hub\0.2.5\package.tgz
+11 verbose folder C:\Users\Nate\Desktop\fit\IntroSE\datagramHub\udp-hub
+12 info prepublish udp-hub@0.2.5
+13 verbose addLocalTarball adding from inside cache C:\Users\Nate\AppData\Roaming\npm-cache\udp-hub\0.2.5\package.tgz
+14 silly cache afterAdd udp-hub@0.2.5
+15 verbose afterAdd C:\Users\Nate\AppData\Roaming\npm-cache\udp-hub\0.2.5\package\package.json not in flight; writing
+16 verbose afterAdd C:\Users\Nate\AppData\Roaming\npm-cache\udp-hub\0.2.5\package\package.json written
+17 silly publish { name: 'udp-hub',
+17 silly publish   version: '0.2.5',
+17 silly publish   description: 'An abstraction of the dgram module that is IPv4/v6 agnostic.',
+17 silly publish   main: 'exports.js',
+17 silly publish   scripts:
+17 silly publish    { test: 'echo "Error: no test specified" && exit 1',
+17 silly publish      start: 'node server.js' },
+17 silly publish   keywords: [ 'udp' ],
+17 silly publish   author: { name: 'Nate Watson', email: 'natewatson999@gmail.com' },
+17 silly publish   license: 'MIT',
+17 silly publish   repository:
+17 silly publish    { type: 'git',
+17 silly publish      url: 'git+https://github.com/natewatson999/udp-hub.git' },
+17 silly publish   bugs: { url: 'https://github.com/natewatson999/udp-hub/issues' },
+17 silly publish   homepage: 'https://github.com/natewatson999/udp-hub#readme',
+17 silly publish   readme: '# udp-hub\r\nUDP-hub is a Node.js module designed to provide a module similar to the dgram module that Node provides natively, with the only difference being that dgram requires the developer to handle IPv4 and IPv6, whearas upd-hub is supposed to allow the developer to handle them as one. So rather than making two servers, one for IPv4, and one for IPv6; you can just make one server that can handle both. Note that everything in this module is based on IP addresses. There is no internal support for domain names or NIC addresses. However, there is a set of functions for getting IP addresses from domain names, and a future version will have MAC address support. \r\n\r\nThis module is published under the MIT license. A working example that uses the basic features can be found in tester.js.\r\n\r\n## Installation Instructions\r\n\r\n### Local Installation\r\n\r\nIn the directory in question, run this command:\r\n\r\n```\r\nnpm install udp-hub\r\n```\r\n\r\n### Global Installation\r\n\r\nAssuming you have the rights to do so, run this command:\r\n\r\n```\r\nnpm install -g udp-hub\r\n```\r\n\r\n## Usage instructions\r\n\r\n### udpHub.createServer\r\n\r\nThis function creates a new UDP server. This server, by default, works with all IP addresses, in both IPv4 and IPv6. Its only parameter is a callback function, whose only parameters are the message body, and client information. The message body can be treated as a string. The client information has 4 parameters: address, family, port, and size. address is the client IP address of some format, family is the IP version in either "IPv4" or "IPv6", port is the port number the message was transmitted on, and size is the message size.\r\n\r\n#### udpHub.createServer.bind\r\n\r\nThis function binds this server to a port, with an optional callback. There are two parameters: a port number, and an optional callback.\r\n\r\n#### udpHub.createServer.send\r\n\r\nThis function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the ending index of the response, the response port number, and the IP address "v6 and v4 are both valid" of the intended client.\r\n\r\n#### udpHub.createServer.close\r\n\r\nThis function closes a server. It has one parameter: an optional parameter-less callback function.\r\n\r\n#### Server Example:\r\n\r\n```\r\nvar udp = require("udp-hub");\r\nvar server = udp.createServer(function(message, client){\r\n\tconsole.log(message);\r\n\tconsole.dir(client);\r\n\tvar response = new Buffer(" \\r\\n");\r\n\tserver.send(response, 0, response.length, 666, client.address);\r\n\tif(message=="close") {\r\n\t\tserver.close();\r\n\t}\r\n});\r\nserver.bind(666);\r\n```\r\n\r\n### udpHub.createClient\r\n\r\nThis function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; end, the ending index of the buffer; port, the port the server is supposed to get the message on; address, the intended target "IP only"; and callback, the procedure for dealing with the response, if one comes through. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.\r\n\r\n#### Client Example:\r\n\r\n```\r\nvar udp = require("udp-hub");\r\nvar message = new Buffer(" \\r\\n");\r\nvar client = udp.createClient(message, 0, message.length, 666, 127.0.0.1, function(message, info, err){\r\n\tif(err) {\r\n\t\tconsole.log(err);\r\n\t\treturn;\r\n\t}\r\n\tconsole.log(message.toString());\r\n\tconsole.dir(info);\r\n});\r\n```\r\n\r\n### Domain Name related functions\r\n\r\n#### udpHub.ipFormat\r\n\r\nThis function takes a valid IP address in string form, and returns either "IPv6" or "IPv4".\r\n\r\n#### udpHub.get6Addresses\r\n\r\nThis function takes a valid domain name, and calls a callback function whose parameter is an array of length zero or more, where each value is an IPv6 address associated to the domain in question.\r\n\r\n#### udpHub.get4Addresses\r\n\r\nThis function takes a valid domain name, and calls a callback function whose parameter is an array of length zero or more, where each value is an IPv4 address associated to the domain in question.\r\n\r\n#### udpHub.getAddresses\r\n\r\nThis function takes a valid domain name, and calls a callback function whose parameter is an array of length zero or more, where each value is an IP address associated to the domain in question.\r\n\r\n',
+17 silly publish   readmeFilename: 'README.md',
+17 silly publish   gitHead: 'c7c1ce22e1991a97ac60408361d442f183b3edf6',
+17 silly publish   _id: 'udp-hub@0.2.5',
+17 silly publish   _shasum: '4432103ee8918f34418d2d8f88cb4769db5fc259',
+17 silly publish   _from: '.' }
+18 verbose getPublishConfig undefined
+19 silly mapToRegistry name udp-hub
+20 silly mapToRegistry using default registry
+21 silly mapToRegistry registry https://registry.npmjs.org/
+22 silly mapToRegistry uri https://registry.npmjs.org/udp-hub
+23 verbose publish registryBase https://registry.npmjs.org/
+24 silly publish uploading C:\Users\Nate\AppData\Roaming\npm-cache\udp-hub\0.2.5\package.tgz
+25 verbose request uri https://registry.npmjs.org/udp-hub
+26 verbose request sending authorization for write operation
+27 info attempt registry request try #1 at 21:11:03
+28 verbose request using bearer token for auth
+29 verbose request id 9194cb0e6c96c3aa
+30 http request PUT https://registry.npmjs.org/udp-hub
+31 http 403 https://registry.npmjs.org/udp-hub
+32 verbose headers { 'content-type': 'application/json',
+32 verbose headers   'cache-control': 'max-age=60',
+32 verbose headers   'content-length': '95',
+32 verbose headers   'accept-ranges': 'bytes',
+32 verbose headers   date: 'Sat, 18 Jul 2015 01:11:00 GMT',
+32 verbose headers   via: '1.1 varnish',
+32 verbose headers   connection: 'keep-alive',
+32 verbose headers   'x-served-by': 'cache-iad2120-IAD',
+32 verbose headers   'x-cache': 'MISS',
+32 verbose headers   'x-cache-hits': '0',
+32 verbose headers   'x-timer': 'S1437181860.026992,VS0,VE808' }
+33 verbose request invalidating C:\Users\Nate\AppData\Roaming\npm-cache\registry.npmjs.org\udp-hub on PUT
+34 error publish Failed PUT 403
+35 verbose stack Error: "You cannot publish over the previously published version 0.2.5." : udp-hub
+35 verbose stack     at CachingRegistryClient.<anonymous> (C:\Program Files\iojs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:247:14)
+35 verbose stack     at Request._callback (C:\Program Files\iojs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:170:14)
+35 verbose stack     at Request.self.callback (C:\Program Files\iojs\node_modules\npm\node_modules\request\request.js:197:22)
+35 verbose stack     at emitTwo (events.js:87:13)
+35 verbose stack     at Request.emit (events.js:172:7)
+35 verbose stack     at Request.<anonymous> (C:\Program Files\iojs\node_modules\npm\node_modules\request\request.js:1050:14)
+35 verbose stack     at emitOne (events.js:82:20)
+35 verbose stack     at Request.emit (events.js:169:7)
+35 verbose stack     at IncomingMessage.<anonymous> (C:\Program Files\iojs\node_modules\npm\node_modules\request\request.js:996:12)
+35 verbose stack     at emitNone (events.js:72:20)
+36 verbose statusCode 403
+37 verbose pkgid udp-hub
+38 verbose cwd C:\Users\Nate\Desktop\fit\IntroSE\datagramHub\udp-hub
+39 error Windows_NT 6.3.9600
+40 error argv "C:\\Program Files\\iojs\\node.exe" "C:\\Program Files\\iojs\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+41 error node v2.3.4
+42 error npm  v2.12.1
+43 error code E403
+44 error "You cannot publish over the previously published version 0.2.5." : udp-hub
+45 error If you need help, you may report this error at:
+45 error     <https://github.com/npm/npm/issues>
+46 verbose exit [ 1, true ]
