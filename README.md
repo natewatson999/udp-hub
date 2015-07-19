@@ -3,6 +3,12 @@ UDP-hub is a Node.js module designed to provide a module similar to the dgram mo
 
 This module is published under the MIT license. A working example that uses the basic features can be found in tester.js.
 
+This module provides the following:
+* server: This is for networked services. It behaves kind of like the http's createServer features, except it's UDP.
+* client: This is for simple 1-time requests with simple 1-time responses. It's kind of like the get function in the http module, except it's more callback oriented.
+* receiver: This is meant to be as close as feasable to the way dgram lets the developer make clients. It's meant for cases where there may be more than one outward-bound transmission and/or more than one response. 
+* Some utility functions for dealing with IP addresses.
+
 ## Installation Instructions
 
 ### Local Installation
@@ -33,7 +39,7 @@ This function binds this server to a port, with an optional callback. There are 
 
 #### udpHub.createServer.send
 
-This function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the ending index of the response, the response port number, and the IP address "v6 and v4 are both valid" of the intended client.
+This function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the ending index of the response, the response port number, and the IP address "v6 and v4 are both valid" of the intended client. There is an optional 6th parameter: a callback function that is fired when either the response is sent or if there is an error in the response. The function has one parameter: a possibly-null error object.
 
 #### udpHub.createServer.close
 
@@ -57,7 +63,7 @@ server.bind(666);
 
 ### udpHub.createClient
 
-This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; end, the ending index of the buffer; port, the port the server is supposed to get the message on; address, the intended target "IP only"; and callback, the procedure for dealing with the response, if one comes through. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
+This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; end, the ending index of the buffer; port, the port the server is supposed to get the message on; address, the intended target "IP only"; callback, the procedure for dealing with the response, if one comes through; and hops, an optional parameter that specifies the number of IP hops allowed. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
 
 #### Client Example:
 

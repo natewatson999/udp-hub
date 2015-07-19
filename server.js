@@ -44,9 +44,12 @@ createServer.prototype.close = function(callback) {
 	}
 	return;
 }
-var createClient = function(content, start, end, port, address, callback){
+var createClient = function(content, start, end, port, address, callback, hops){
 	if(ipFormat(address) == "IPv6") {
 		var client6 = dgram.createSocket("udp6");
+		if (hops) {
+			client6.setTTL(hops);
+		}
 		client6.on("message", function(content, metaData) {
 			client6.close();
 			callback(content, metaData);
@@ -58,6 +61,9 @@ var createClient = function(content, start, end, port, address, callback){
 		client6.send(content, start, end, port, address);
 	} else {
 		var client4 = dgram.createSocket("udp4");
+		if (hops) {
+			client4.setTTL(hops);
+		}
 		client4.on("message", function(content, metaData) {
 			client4.close();
 			callback(content, metaData);
