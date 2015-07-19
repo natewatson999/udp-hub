@@ -34,8 +34,8 @@ createReceiver.prototype.send = function(message, start, end, port, address){
 	return;
 };
 createReceiver.prototype.close = function() {
-	this.client6.close();
 	this.client4.close();
+	this.client6.close();
 	this.emitter.emit("close");
 }
 createReceiver.prototype.setTTL = function(count) {

@@ -21,6 +21,11 @@ createServer.prototype.bind = function(port, callback){
 		}
 	});
 };
+createServer.prototype.setTTL = function(count) {
+	this.server6.setTTL(count);
+	this.server4.setTTL(count);
+	return;
+};
 createServer.prototype.send = function(content, start, end, port, address, callback){
 	if(ipFormat(address) == "IPv6") {
 		if (callback) {

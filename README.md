@@ -45,6 +45,10 @@ This function is intended for responses. It has 5 parameters: a buffer of a resp
 
 This function closes a server. It has one parameter: an optional parameter-less callback function.
 
+#### udpHub.createServer.setTTL
+
+This function has one parameter: count. This changes the number of hops a packet is allowed to make if it's sent. It can be any integer between 1 and 255. Most systems default to 64. Certain network configurations will change this number on the fly, so this method is not reliable. 
+
 #### Server Example:
 
 ```
@@ -79,6 +83,34 @@ var client = udp.createClient(message, 0, message.length, 666, 127.0.0.1, functi
 	console.dir(info);
 });
 ```
+
+### udpHub.createReceiver
+
+This is indended for cases where one has a UDP client, but it may transmit more than once or may receive more than one response. When made, it returns an event emitter.
+
+#### udpHub.createReceiver.emitter.on("message")
+
+Emitted when a response is received. Has two parameters: message and info. These are identical to dgram's message emission.
+
+#### udpHub.createReceiver.emitter.on("err")
+
+Emitted when there's an error of some kind. Has one parameter: error. The error object is identical to the ones found in the dgram module.
+
+#### udpHub.createReceiver.emitter.on("close")
+
+Emitted when the receiver is closed. Has no parameters. 
+
+#### udpHub.createReceiver.close()
+
+This function closes this receiver. No new sends will be allowed, and no new responses will be allowed. IPv4 traffic is stopped before IPv6, so there may be some quirks that result. Causes the close event to fire.
+
+#### udpHub.createReceiver.setTTL
+
+This function has one parameter: count. This changes the number of hops a packet is allowed to make if it's sent. It can be any integer between 1 and 255. Most systems default to 64. Certain network configurations will change this number on the fly, so this method is not reliable. 
+
+#### udpHub.createReceiver.send
+
+This function is for sending UDP data. The parameters are message, a Buffer of the message; start, the beginning index of the buffer; end, the outer ending index of the buffer; port, the port the data is to be sent on; address, the address of the machine that will receive this packet; and callback, an optional function that is fired when the datagram is sent with one paramter: an error object. This is identical to the send function in the dgram module. 
 
 ### Domain Name related functions
 
