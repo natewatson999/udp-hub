@@ -15,13 +15,13 @@ var createReceiver = function (){
 		this.emitter.emit("message", message, info);
 	});
 	this.client6.on("error", function(err){
-		this.emitter.emit(err);
+		this.emitter.emit("error", err);
 	});
 	this.client4.on("message", function(message, info){
 		this.emitter.emit("message", message, info);
 	});
 	this.client4.on("error", function(err){
-		this.emitter.emit(err);
+		this.emitter.emit("error", err);
 	});
 	return this.emitter;
 };
