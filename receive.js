@@ -25,11 +25,11 @@ var createReceiver = function (){
 	});
 	return this.emitter;
 };
-createReceiver.prototype.send = function(message, start, end, port, address){
+createReceiver.prototype.send = function(message, start, end, port, address, callback){
 	if (ipFormat(address)=="IPv6") {
-		this.client6.send(message, start, end, port, address);
+		this.client6.send(message, start, end, port, address, callback);
 	} else {
-		this.client4.send(message, start, end, port, address);
+		this.client4.send(message, start, end, port, address, callback);
 	}
 	return;
 };

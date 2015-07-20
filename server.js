@@ -50,35 +50,29 @@ createServer.prototype.close = function(callback) {
 	return;
 }
 var createClient = function(content, start, end, port, address, callback, hops){
-	if(ipFormat(address) == "IPv6") {
-		var client6 = dgram.createSocket("udp6");
-		if (hops) {
-			client6.setTTL(hops);
-		}
-		client6.on("message", function(content, metaData) {
-			client6.close();
-			callback(content, metaData);
-		});
-		client6.on("error", function(err){
-			client6.close();
-			callback("", {address: "::0", family: "IPv6", port: 0, size: 0 }, err);
-		});
-		client6.send(content, start, end, port, address);
+	var response;
+	var format = ipFormat(address);
+	if(format == "IPv6") {
+		response = dgram.createSocket("udp6");
 	} else {
-		var client4 = dgram.createSocket("udp4");
-		if (hops) {
-			client4.setTTL(hops);
-		}
-		client4.on("message", function(content, metaData) {
-			client4.close();
-			callback(content, metaData);
-		});
-		client4.on("error", function(err){
-			client4.close();
-			callback("", {address: "0.0.0.0", family: "IPv4", port: 0, size: 0 }, err);
-		});
-		client4.send(content, start, end, port, address);		
+		response = dgram.createSocket("udp4");
 	}
+	if (hops) {
+		response.setTTL(hops);
+	}
+	response.on("message", function(content, metaData) {
+		response.close();
+		callback(content, metaData);
+	});
+	response.on("error", function(err){
+		response.close();
+		if (format == "IPv6") {
+			callback("", {address: "::0", family: format, port: 0, size: 0 }, err);
+		} else {
+			callback("", {address: "0.0.0.0", family: format, port: 0, size: 0 }, err);		
+		}
+	});
+	response.send(content, start, end, port, address);
 	return;
 };
 var server = {};
