@@ -39,7 +39,7 @@ This function binds this server to a port, with an optional callback. There are 
 
 #### udpHub.createServer.send
 
-This function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the ending index of the response, the response port number, and the IP address "v6 and v4 are both valid" of the intended client. There is an optional 6th parameter: a callback function that is fired when either the response is sent or if there is an error in the response. The function has one parameter: a possibly-null error object.
+This function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the size of the response, the response port number, and the IP address "v6 and v4 are both valid" of the intended client. There is an optional 6th parameter: a callback function that is fired when either the response is sent or if there is an error in the response. The function has one parameter: a possibly-null error object.
 
 #### udpHub.createServer.close
 
@@ -67,7 +67,7 @@ server.bind(666);
 
 ### udpHub.createClient
 
-This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; end, the ending index of the buffer; port, the port the server is supposed to get the message on; address, the intended target "IP only"; callback, the procedure for dealing with the response, if one comes through; and hops, an optional parameter that specifies the number of IP hops allowed. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
+This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; size, the size of the datagram; port, the port the server is supposed to get the message on; address, the intended target "IP only"; callback, the procedure for dealing with the response, if one comes through; and hops, an optional parameter that specifies the number of IP hops allowed. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
 
 #### Client Example:
 
@@ -118,7 +118,7 @@ This function removes this receiver from the list of sockets listening to a broa
 
 #### udpHub.createReceiver.send
 
-This function is for sending UDP data. The parameters are message, a Buffer of the message; start, the beginning index of the buffer; end, the outer ending index of the buffer; port, the port the data is to be sent on; address, the address of the machine that will receive this packet; and callback, an optional function that is fired when the datagram is sent with one paramter: an error object. This is identical to the send function in the dgram module. 
+This function is for sending UDP data. The parameters are message, a Buffer of the message; start, the beginning index of the buffer; size, the size of the transmission; port, the port the data is to be sent on; address, the address of the machine that will receive this packet; and callback, an optional function that is fired when the datagram is sent with one paramter: an error object. This is identical to the send function in the dgram module. 
 
 ### udpHub.createBroadcaster
 
@@ -138,7 +138,7 @@ This function sets the IP_MULTICAST_LOOP of the sockets to either false or true,
 
 #### createBroadcaster.broadcast
 
-This function broadcasts a message. The parameters are the message in the form a buffer, starting index, ending index, broadcasting port, broadcast address, and an optional callback. The callback's only parameter is an error object.
+This function broadcasts a message. The parameters are the message in the form a buffer, starting index, size, broadcasting port, broadcast address, and an optional callback. The callback's only parameter is an error object.
 
 ### Domain Name related functions
 
