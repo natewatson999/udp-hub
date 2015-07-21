@@ -42,6 +42,13 @@ createReceiver.prototype.setTTL = function(count) {
 	this.client6.setTTL(count);
 	this.client4.setTTL(count);
 }
+createReceiver.prototype.addMembership = function(address) {
+	if (ipFormat(address)=="IPv6") {
+		this.client6.addMembership(address);
+	} else {
+		this.client6.addMembership(address);
+	}
+}
 output.createReceiver = function(){
 	return new createReceiver();
 };

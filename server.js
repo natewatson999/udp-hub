@@ -48,7 +48,7 @@ createServer.prototype.close = function(callback) {
 		callback();
 	}
 	return;
-}
+};
 var createClient = function(content, start, end, port, address, callback, hops){
 	var response;
 	var format = ipFormat(address);
@@ -81,7 +81,7 @@ server.createServer = function(callback){
 };
 server.createClient = function(content, start, end, port, address, callback) {
 	return new createClient(content, start, end, port, address, callback);
-}
+};
 server.ipFormat = function(address) {
 	return ipFormat(address);
 };
