@@ -108,9 +108,37 @@ This function closes this receiver. No new sends will be allowed, and no new res
 
 This function has one parameter: count. This changes the number of hops a packet is allowed to make if it's sent. It can be any integer between 1 and 255. Most systems default to 64. Certain network configurations will change this number on the fly, so this method is not reliable. 
 
+#### udpHub.createReceiver.addMembership
+
+This function adds this receiver to the list of sockets listening to a broadcast address. The broadcast address is either an IPv4 or IPv6 address, given as the zeroth parameter. The last parameter is optional, the multicast interface. 
+
+#### udpHub.createReceiver.dropMembership
+
+This function removes this receiver from the list of sockets listening to a broadcast address. The parameters are identicall to createReceiver.addMembership, and the code is mostly copy-pasted.
+
 #### udpHub.createReceiver.send
 
 This function is for sending UDP data. The parameters are message, a Buffer of the message; start, the beginning index of the buffer; end, the outer ending index of the buffer; port, the port the data is to be sent on; address, the address of the machine that will receive this packet; and callback, an optional function that is fired when the datagram is sent with one paramter: an error object. This is identical to the send function in the dgram module. 
+
+### udpHub.createBroadcaster
+
+These objects are for broadcasting datagrams.
+
+#### createBroadcaster.close
+
+This function closes this broadcaster, with an optional callback.
+
+#### createBroadcaster.setMulticastTTL
+
+This function takes an integer between 0 and 255, and sets the broadcast ttl of the sockets to the number. The default is 64, regardless of platform.
+
+#### createBroadcaster.setMulticastLoopback
+
+This function sets the IP_MULTICAST_LOOP of the sockets to either false or true, depending on the parameter.
+
+#### createBroadcaster.broadcast
+
+This function broadcasts a message. The parameters are the message in the form a buffer, starting index, ending index, broadcasting port, broadcast address, and an optional callback. The callback's only parameter is an error object.
 
 ### Domain Name related functions
 

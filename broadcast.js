@@ -1,27 +1,34 @@
 var output = {};
 var dgram = require("dgram");
 var createBroadcaster = function(){
-	var server6 = dgram.createSocket("udp6");
-	var server4 = dgram.createSocket("udp4");
-	server6.setMulticastTTL(64);
-	server4.setMulticastTTL(64);
+	this.server6 = dgram.createSocket("udp6");
+	this.server4 = dgram.createSocket("udp4");
+	this.server6.setBroadcast(true);
+	this.server4.setBroadcast(true);
+	this.server6.setMulticastTTL(64);
+	this.server4.setMulticastTTL(64);
 };
 createBroadcaster.prototype.close = function(callback) {
-	server6.close();
-	server4.close();
+	this.server6.close();
+	this.server4.close();
 	callback();
 	return;
 };
 createBroadcaster.prototype.setMulticastTTL = function(value) {
-	server6.setMulticastTTL(value);
-	server4.setMulticastTTL(value);
-}
+	this.server6.setMulticastTTL(value);
+	this.server4.setMulticastTTL(value);
+};
 createBroadcaster.prototype.broadcast = function(buffer, start, end, port, address, callback){
 	if (ipFormat(address)=="IPv6") {
-		server6.send(buffer, start, end, port, address, callback);
+		this.server6.send(buffer, start, end, port, address, callback);
 	} else {
-		server4.send(buffer, start, end, port, address, callback);		
+		this.server4.send(buffer, start, end, port, address, callback);		
 	}
+};
+createBroadcaster.prototype.setMulticastLoopback = function(value) {
+	this.server6.setMulticastLoopback(value);
+	this.server4.setMulticastLoopback(value);
+	return;
 };
 output.createBroadcaster = function(){
 	return new createBroadcaster();

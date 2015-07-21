@@ -37,18 +37,41 @@ createReceiver.prototype.close = function() {
 	this.client4.close();
 	this.client6.close();
 	this.emitter.emit("close");
-}
+};
 createReceiver.prototype.setTTL = function(count) {
 	this.client6.setTTL(count);
 	this.client4.setTTL(count);
-}
-createReceiver.prototype.addMembership = function(address) {
+};
+createReceiver.prototype.addMembership = function(address, interface) {
 	if (ipFormat(address)=="IPv6") {
-		this.client6.addMembership(address);
+		if (interface) {
+			this.client6.addMembership(address, interface);
+		} else {
+			this.client6.addMembership(address);
+		}
 	} else {
-		this.client6.addMembership(address);
+		if (interface) {
+			this.client4.addMembership(address, interface);
+		} else {
+			this.client4.addMembership(address);
+		}
 	}
-}
+};
+createReceiver.prototype.dropMembership = function(address, interface) {
+	if (ipFormat(address)=="IPv6") {
+		if (interface) {
+			this.client6.dropMembership(address, interface);
+		} else {
+			this.client6.dropMembership(address);
+		}
+	} else {
+		if (interface) {
+			this.client4.dropMembership(address, interface);
+		} else {
+			this.client4.dropMembership(address);
+		}
+	}
+};
 output.createReceiver = function(){
 	return new createReceiver();
 };
