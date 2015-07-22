@@ -7,6 +7,7 @@ This module provides the following:
 * server: This is for networked services. It behaves kind of like the http's createServer features, except it's UDP.
 * client: This is for simple 1-time requests with simple 1-time responses. It's kind of like the get function in the http module, except it's more callback oriented.
 * receiver: This is meant to be as close as feasable to the way dgram lets the developer make clients. It's meant for cases where there may be more than one outward-bound transmission and/or more than one response. 
+* broadcaster: This is for sending broadcasts. 
 * Some utility functions for dealing with IP addresses.
 
 ## Installation Instructions
@@ -99,6 +100,10 @@ Emitted when there's an error of some kind. Has one parameter: error. The error 
 #### udpHub.createReceiver.emitter.on("close")
 
 Emitted when the receiver is closed. Has no parameters. 
+
+#### udpHub.createReceiver.emitter.on(listening)
+
+Emitted when the receiver is listening for both IPv4 and IPv6.
 
 #### udpHub.createReceiver.close()
 

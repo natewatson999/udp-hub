@@ -11,17 +11,23 @@ var createReceiver = function (){
 	this.emitter = new events.EventEmitter();
 	this.client6 = dgram.createSocket("udp6");
 	this.client4 = dgram.createSocket("udp4");
+	var self = this;
 	this.client6.on("message", function(message, info){
-		this.emitter.emit("message", message, info);
+		self.emitter.emit("message", message, info);
 	});
 	this.client6.on("error", function(err){
-		this.emitter.emit("error", err);
+		self.emitter.emit("error", err);
 	});
 	this.client4.on("message", function(message, info){
-		this.emitter.emit("message", message, info);
+		self.emitter.emit("message", message, info);
 	});
 	this.client4.on("error", function(err){
-		this.emitter.emit("error", err);
+		self.emitter.emit("error", err);
+	});
+	this.client6.on("listening", function(){
+		self.client4.on("listening", function(){
+			self.emitter.emit("listening");
+		});
 	});
 	return this.emitter;
 };
