@@ -12,24 +12,29 @@ var createReceiver = function (){
 	this.client6 = dgram.createSocket("udp6");
 	this.client4 = dgram.createSocket("udp4");
 	var self = this;
-	this.client6.on("message", function(message, info){
-		self.emitter.emit("message", message, info);
-	});
-	this.client6.on("error", function(err){
-		self.emitter.emit("error", err);
-	});
-	this.client4.on("message", function(message, info){
-		self.emitter.emit("message", message, info);
-	});
-	this.client4.on("error", function(err){
-		self.emitter.emit("error", err);
-	});
-	this.client6.on("listening", function(){
-		self.client4.on("listening", function(){
-			self.emitter.emit("listening");
-		});
-	});
-	return this.emitter;
+	var self = this;
+	this.on = function(event, callback) {
+		switch(event) {
+			case "message":
+				self.client6.on("message", callback);
+				self.client4.on("message", callback);
+				break;
+			case "listening":
+				self.client6.on("listening", function(){
+					self.client4.on("listening", callback);
+				});
+				break;
+			case "error":
+				self.client6.on("error", callback);
+				self.client4.on("error", callback);
+				break;
+			case "close":
+				self.client6.on("close", callback);
+				break;
+			default:
+				break;
+		}
+	};
 };
 createReceiver.prototype.send = function(message, start, end, port, address, callback){
 	if (ipFormat(address)=="IPv6") {
@@ -42,7 +47,6 @@ createReceiver.prototype.send = function(message, start, end, port, address, cal
 createReceiver.prototype.close = function() {
 	this.client4.close();
 	this.client6.close();
-	this.emitter.emit("close");
 };
 createReceiver.prototype.setTTL = function(count) {
 	this.client6.setTTL(count);
