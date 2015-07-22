@@ -1,4 +1,10 @@
 var output = {};
+var ipFormat = function(address) {
+	if (address.indexOf(":") > -1) {
+		return "IPv6";
+	}
+	return "IPv4";
+};
 var dgram = require("dgram");
 var createBroadcaster = function(callback){
 	this.server6 = dgram.createSocket("udp6");
