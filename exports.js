@@ -3,7 +3,10 @@ var server = require("./server.js");
 output.createServer = server.createServer;
 output.createClient = server.createClient;
 output.ipFormat = server.ipFormat;
-output.createBroadcaster = require("./broadcast.js").createBroadcaster;
+var broadcast = require("./broadcast.js")
+output.createBroadcaster = function(callback) {
+	return broadcast.createBroadcaster(callback);
+};
 output.createReceiver = require("./receive.js").createReceiver;
 var dns = require("dns");
 output.get6Addresses = function(domainName, callback) {

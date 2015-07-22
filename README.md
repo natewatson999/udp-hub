@@ -127,7 +127,7 @@ This function is for sending UDP data. The parameters are message, a Buffer of t
 
 ### udpHub.createBroadcaster
 
-These objects are for broadcasting datagrams.
+These objects are for broadcasting datagrams. The constructor has one parameter: a mandatory callback. 
 
 #### createBroadcaster.close
 

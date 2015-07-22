@@ -42,3 +42,6 @@ var second = new Buffer(" ");
 var serverAddress = "::1";
 receiver.send(second, 0, second.length, port, serverAddress);
 
+var broadcaster = udp.createBroadcaster(function(){
+	broadcaster.close();
+});
