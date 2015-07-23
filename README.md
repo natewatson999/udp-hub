@@ -66,6 +66,14 @@ var server = udp.createServer(function(message, client){
 server.bind(666);
 ```
 
+### udpHub.createServer.ref()
+
+Sets this server to the default behavior: if this server is still open, then the script will continue running.
+
+### udpHub.createServer.unref()
+
+Sets the server so that if this server has the only sockets left running, then the script will end. Non-default, and not recommend. 
+
 ### udpHub.createClient
 
 This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; size, the size of the datagram; port, the port the server is supposed to get the message on; address, the intended target "IP only"; callback, the procedure for dealing with the response, if one comes through; and hops, an optional parameter that specifies the number of IP hops allowed. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
@@ -107,7 +115,7 @@ Emitted when the receiver is listening for both IPv4 and IPv6.
 
 #### udpHub.createReceiver.close()
 
-This function closes this receiver. No new sends will be allowed, and no new responses will be allowed. IPv4 traffic is stopped before IPv6, so there may be some quirks that result. Causes the close event to fire.
+This function closes this receiver. No new sends will be allowed, and no new responses will be allowed. IPv4 traffic is stopped before IPv6, so there may be some quirks that result. Causes the close event to fire. One optional parameter: a callback function with no parameters.
 
 #### udpHub.createReceiver.setTTL
 
@@ -124,6 +132,39 @@ This function removes this receiver from the list of sockets listening to a broa
 #### udpHub.createReceiver.send
 
 This function is for sending UDP data. The parameters are message, a Buffer of the message; start, the beginning index of the buffer; size, the size of the transmission; port, the port the data is to be sent on; address, the address of the machine that will receive this packet; and callback, an optional function that is fired when the datagram is sent with one paramter: an error object. This is identical to the send function in the dgram module. 
+
+### udpHub.createReceiver.ref()
+
+Sets this receiver to the default behavior: if this receiver is still open, then the script will continue running.
+
+### udpHub.createReceiver.unref()
+
+Sets the receiver so that if this receiver has the only sockets left running, then the script will end. Non-default, and not recommend. 
+
+#### udpHub.createReceiver Example:
+
+```
+var receiver = udp.createReceiver();
+receiver.on("listening", function(){
+	console.log("listening");
+	/*You won't see this.*/
+});
+receiver.on("error", function(err){
+	console.log(err);
+});
+receiver.on("message", function(message, info){
+	console.log(message);
+	console.dir(info);
+	console.log("received");
+	receiver.close();
+});
+receiver.on("close", function(){
+	console.log("close");
+});
+var second = new Buffer(" ");
+var serverAddress = "::1";
+receiver.send(second, 0, second.length, port, serverAddress);
+```
 
 ### udpHub.createBroadcaster
 
@@ -144,6 +185,14 @@ This function sets the IP_MULTICAST_LOOP of the sockets to either false or true,
 #### createBroadcaster.broadcast
 
 This function broadcasts a message. The parameters are the message in the form a buffer, starting index, size, broadcasting port, broadcast address, and an optional callback. The callback's only parameter is an error object.
+
+### udpHub.createBroadcaster.ref()
+
+Sets this broadcaster to the default behavior: if this broadcaster is still open, then the script will continue running.
+
+### udpHub.createBroadcaster.unref()
+
+Sets this broadcaster so that if this broadcaster has the only sockets left running, then the script will end. Non-default, and not recommend. 
 
 ### Domain Name related functions
 
