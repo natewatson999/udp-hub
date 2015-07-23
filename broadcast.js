@@ -38,6 +38,14 @@ createBroadcaster.prototype.setMulticastLoopback = function(value) {
 	this.server4.setMulticastLoopback(value);
 	return;
 };
+createBroadcaster.prototype.ref = function(){
+	this.server6.ref();
+	this.server4.ref();
+};
+createBroadcaster.prototype.unref = function(){
+	this.server6.unref();
+	this.server4.unref();
+};
 output.createBroadcaster = function(callback){
 	return new createBroadcaster(callback);
 };

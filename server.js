@@ -45,6 +45,14 @@ createServer.prototype.close = function(callback) {
 	}
 	return;
 };
+createServer.prototype.ref = function(){
+	this.server6.ref();
+	this.server4.ref();
+};
+createServer.prototype.unref = function(){
+	this.server6.unref();
+	this.server4.unref();
+};
 var createClient = function(content, start, end, port, address, callback, hops){
 	var response;
 	var format = ipFormat(address);
