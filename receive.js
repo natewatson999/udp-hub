@@ -39,9 +39,15 @@ createReceiver.prototype.send = function(message, start, end, port, address, cal
 	}
 	return;
 };
-createReceiver.prototype.close = function() {
-	this.client4.close();
-	this.client6.close();
+createReceiver.prototype.close = function(callback) {
+	var self = this;
+	this.client4.close(function(){
+		self.client6.close(function(){
+			if (callback) {
+				callback();
+			}
+		});
+	});
 };
 createReceiver.prototype.setTTL = function(count) {
 	this.client6.setTTL(count);
