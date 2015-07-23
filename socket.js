@@ -26,9 +26,42 @@ var createSocket = function(paramA, paramB){
 	};
 	this.emitter = new events.EventEmitter();
 	self = this;
+	this.socket6.on("listening", function(){
+		self.open6 = true;
+	});
+	this.socket4.on("listening", function(){
+		self.open4 = true;
+	});
 	this.socket6 = dgram.createSocket(config6, function(){
 		self.socket4 = dgram.createSocket(config4, callback);
 	});
+	return;
+};
+createSocket.prototype.close(callback) {
+	if(callback) {
+		this.on("close", callback);
+	}
+	var self = this;
+	var end = function(){
+		self.emitter.emit("close");
+	};
+	var kill4 = function(){
+		if(self.open4) {
+			self.open4 = false;
+			self.socket4.close(function(){
+				self.emitter.emit("close");
+			});
+		} else {
+			self.emitter.emit("close");
+		}
+		return;
+	};
+	if (self.open6) {
+		self.open6 = false;
+		self.socket6.close(kill4);
+	} else {
+		kill4();
+	}
 	return;
 };
 createSocket.prototype.on = function(condition, callback) {
@@ -49,4 +82,69 @@ createSocket.prototype.on = function(condition, callback) {
 			break;
 		default:
 	}
+};
+createSocket.prototype.send = function(buf, offset, length, port, address, callback) {
+	if (ipFormat(address)=="IPv6") {
+		this.socket6.send(buf, offset, length, port, address, callback);
+	} else {
+		this.socket4.send(buf, offset, length, port, address, callback);
+	}
+};
+createSocket.prototype.bind = function(paramA, paramB, paramC){
+	var self = this;
+	if (!(paramA)) {
+		this.socket6.bind(function(){
+			self.socket4.bind( function() {
+				self.emitter.emit("listening");
+			});
+		});
+		return;
+	}
+	if (typeof paramA === "function") {
+		this.on("listening", paramA)
+		this.bind();
+		return;
+	}
+	if (paramB) {
+		if(typeof paramB === "function") {
+			this.on("listening", paramB)
+			this.bind(paramA);
+			return;
+		}
+	}
+	if (paramC) {
+		this.on("listening", paramC)
+		this.bind(paramA, paramB);
+		return;
+	}
+	if (paramB) {
+		if(ipFormat(paramB) == "IPv6") {
+			this.socket6.bind(paramA, paramB, function(){
+				self.emitter.emit("listening");
+			});
+		} else {
+			this.socket4.bind(paramA, paramB, function(){
+				self.emitter.emit("listening");
+			});
+		}
+		return;
+	}
+	if (typeof paramA === "number") {
+		this.socket6.bind(paramA, function(){
+			self.socket4.bind(paramA, function(){
+				self.emitter.emit("listening");
+			});
+		});
+		return;
+	}
+	if(ipFormat(paramA) == "IPv6") {
+		this.socket6.bind(paramA, function(){
+			self.emitter.emit("listening");
+		});
+		return;
+	}
+	this.socket4.bind(paramA, function(){
+		self.emitter.emit("listening");
+	});
+	return;
 };
