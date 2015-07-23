@@ -3,7 +3,7 @@ var server = require("./server.js");
 output.createServer = server.createServer;
 output.createClient = server.createClient;
 output.ipFormat = require("./addressLogic").ipFormat;
-var broadcast = require("./broadcast.js")
+var broadcast = require("./broadcast.js");
 output.createBroadcaster = function(callback) {
 	return broadcast.createBroadcaster(callback);
 };
