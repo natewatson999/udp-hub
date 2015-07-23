@@ -1,11 +1,6 @@
 var dgram = require("dgram");
 var events = require("events");
-var ipFormat = function(address) {
-	if (address.indexOf(":") > -1) {
-		return "IPv6";
-	}
-	return "IPv4";
-};
+var ipFormat = require("./addressLogic").ipFormat;
 var output = {};
 var createReceiver = function (){
 	this.emitter = new events.EventEmitter();

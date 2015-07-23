@@ -1,18 +1,11 @@
 var dgram = require("dgram");
 var events = require("events");
-var ipFormat = function(address) {
-	if (address.indexOf(":") > -1) {
-		return "IPv6";
-	}
-	return "IPv4";
-};
+var ipFormat = require("./addressLogic").ipFormat;
+
 var createServer = function(callback){
 	var self = this;
-	this.server6 = dgram.createSocket("udp6");
-	this.server4 = dgram.createSocket("udp4");
-	if (callback) {
-		callback();
-	}
+	this.server6 = dgram.createSocket("udp6", callback);
+	this.server4 = dgram.createSocket("udp4", callback);
 };
 createServer.prototype.bind = function(port, callback){
 	var self = this;
@@ -84,8 +77,5 @@ server.createServer = function(callback){
 };
 server.createClient = function(content, start, end, port, address, callback) {
 	return new createClient(content, start, end, port, address, callback);
-};
-server.ipFormat = function(address) {
-	return ipFormat(address);
 };
 module.exports = exports = server;
