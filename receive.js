@@ -1,12 +1,9 @@
 var dgram = require("dgram");
-var events = require("events");
 var ipFormat = require("./addressLogic").ipFormat;
 var output = {};
 var createReceiver = function (){
-	this.emitter = new events.EventEmitter();
 	this.client6 = dgram.createSocket("udp6");
 	this.client4 = dgram.createSocket("udp4");
-	var self = this;
 	var self = this;
 	this.on = function(event, callback) {
 		switch(event) {
