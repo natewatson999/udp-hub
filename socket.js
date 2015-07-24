@@ -18,30 +18,49 @@ var createSocket = function(paramA, paramB){
 	}
 	var config6 = {
 		reuseAddr: reuseAddr,
-		family: "udp6"
+		type: "udp6"
 	};
 	var config4 = {
 		reuseAddr: reuseAddr,
-		family: "udp4"
+		type: "udp4"
 	};
 	this.emitter = new events.EventEmitter();
 	self = this;
-	this.socket6.on("listening", function(){
-		self.open6 = true;
-	});
-	this.socket4.on("listening", function(){
-		self.open4 = true;
-	});
 	this.socket6 = dgram.createSocket(config6, function(){
 		self.socket4 = dgram.createSocket(config4, function(){
 			self.socket4.setTTL(64);
 			self.socket6.setTTL(64);
+			self.socket6.on("listening", function(){
+				self.open6 = true;
+			});
+			self.socket4.on("listening", function(){
+				self.open4 = true;
+			});
 			callback();
 		});
 	});
 	return;
 };
-createSocket.prototype.close(callback) {
+createSocket.prototype.on = function(condition, callback) {
+	switch(condition) {
+		case "listening":
+			this.emitter.on("listening", callback);
+			break;
+		case "message":
+			this.socket6.on("message", callback);
+			this.socket4.on("message", callback);
+			break;
+		case "error":
+			this.socket6.on("error", callback);
+			this.socket4.on("error", callback);
+			break;
+		case "close":
+			this.emitter.on("close", callback);
+			break;
+		default:
+	}
+};
+createSocket.prototype.close = function(callback) {
 	if(callback) {
 		this.on("close", callback);
 	}
@@ -67,25 +86,6 @@ createSocket.prototype.close(callback) {
 		kill4();
 	}
 	return;
-};
-createSocket.prototype.on = function(condition, callback) {
-	switch(condition) {
-		case "listening":
-			this.emitter.on("listening", callback);
-			break;
-		case "message":
-			this.socket6.on("message", callback);
-			this.socket4.on("message", callback);
-			break;
-		case "error":
-			this.socket6.on("error", callback);
-			this.socket4.on("error", callback);
-			break;
-		case "close":
-			this.emitter.on("close", callback);
-			break;
-		default:
-	}
 };
 createSocket.prototype.send = function(buf, offset, length, port, address, callback) {
 	if (ipFormat(address)=="IPv6") {

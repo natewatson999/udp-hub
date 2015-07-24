@@ -41,7 +41,13 @@ receiver.on("close", function(){
 var second = new Buffer(" ");
 var serverAddress = "::1";
 receiver.send(second, 0, second.length, port, serverAddress);
-
+var socketAPI = require("./socket.js");
+var socket = socketAPI.createSocket();
+socket.on("close", function(){
+	console.log("close again");
+});
+socket.close();
+console.log("reached");
 var broadcaster = udp.createBroadcaster(function(){
 	broadcaster.close();
 });

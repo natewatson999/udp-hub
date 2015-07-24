@@ -1,13 +1,14 @@
 var output = {};
 var server = require("./server.js");
+output.ipFormat = require("./addressLogic").ipFormat;
 output.createServer = server.createServer;
 output.createClient = server.createClient;
-output.ipFormat = require("./addressLogic").ipFormat;
 var broadcast = require("./broadcast.js");
 output.createBroadcaster = function(callback) {
 	return broadcast.createBroadcaster(callback);
 };
 output.createReceiver = require("./receive.js").createReceiver;
+output.createSocket = require("./socket.js").createSocket;
 var dns = require("dns");
 output.get6Addresses = function(domainName, callback) {
 	dns.resolve6(domainName, function(err, results){
