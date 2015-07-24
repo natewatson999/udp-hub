@@ -201,7 +201,45 @@ createSocket.prototype.setMulticastLoopback = function(value) {
 	if(this.open6 == true) {
 		this.socket6.setMulticastLoopback(value);
 	}
-}
+};
+createSocket.prototype.addMembership = function(address, interface){
+	if (ipFormat(address)=="IPv6") {
+		if (interface) {
+			this.socket6.addMembership(address, interface);
+		} else {
+			this.socket6.addMembership(address);
+		}
+	} else {
+		if (interface) {
+			this.socket4.addMembership(address, interface);
+		} else {
+			this.socket4.addMembership(address);
+		}
+	}
+};
+createSocket.prototype.dropMembership = function(address, interface){
+	if (ipFormat(address)=="IPv6") {
+		if (interface) {
+			this.socket6.dropMembership(address, interface);
+		} else {
+			this.socket6.dropMembership(address);
+		}
+	} else {
+		if (interface) {
+			this.socket4.dropMembership(address, interface);
+		} else {
+			this.socket4.dropMembership(address);
+		}
+	}
+};
+createSocket.prototype.ref = function(){
+	this.socket6.ref();
+	this.socket4.ref();
+};
+createSocket.prototype.unref = function(){
+	this.socket6.unref();
+	this.socket4.unref();
+};
 var output = {};
 output.createSocket = function(paramA, paramB) {
 	return new createSocket(paramA, paramB);
