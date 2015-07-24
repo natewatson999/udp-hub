@@ -171,12 +171,39 @@ createSocket.prototype.address = function(){
 createSocket.prototype.setBroadcast = function(value){
 	if(this.open4 == true) {
 		this.socket4.setBroadcast(value);
+		if(value==true) {
+			this.socket4.setMulticastTTL(64);
+		}
 	}
 	if(this.open6 == true) {
 		this.socket6.setBroadcast(value);
+		if(value==true) {
+			this.socket6.setMulticastTTL(64);
+		}
 	}
 };
 createSocket.prototype.setTTL = function(value) {
 	this.socket4.setTTL(value);
 	this.socket6.setTTL(value);
 };
+createSocket.prototype.setMulticastTTL = function(value) {
+	if(this.open4 == true) {
+		this.socket4.setMulticastTTL(value);
+	}
+	if(this.open6 == true) {
+		this.socket6.setMulticastTTL(value);
+	}
+};
+createSocket.prototype.setMulticastLoopback = function(value) {
+	if(this.open4 == true) {
+		this.socket4.setMulticastLoopback(value);
+	}
+	if(this.open6 == true) {
+		this.socket6.setMulticastLoopback(value);
+	}
+}
+var output = {};
+output.createSocket = function(paramA, paramB) {
+	return new createSocket(paramA, paramB);
+};
+module.exports = exports = output;
