@@ -33,7 +33,11 @@ var createSocket = function(paramA, paramB){
 		self.open4 = true;
 	});
 	this.socket6 = dgram.createSocket(config6, function(){
-		self.socket4 = dgram.createSocket(config4, callback);
+		self.socket4 = dgram.createSocket(config4, function(){
+			self.socket4.setTTL(64);
+			self.socket6.setTTL(64);
+			callback();
+		});
 	});
 	return;
 };
@@ -147,4 +151,32 @@ createSocket.prototype.bind = function(paramA, paramB, paramC){
 		self.emitter.emit("listening");
 	});
 	return;
+};
+createSocket.prototype.address = function(){
+	var result = {};
+	if(this.open4 == true) {
+		var address4 = this.socket4.address();
+		result.udp4.address = address4.address;
+		result.udp4.family = address4.family;
+		result.udp4.port = address.port;
+	}
+	if(this.open4 == true) {
+		var address6 = this.socket6.address();
+		result.udp6.address = address6.address;
+		result.udp6.family = address6.family;
+		result.udp6.port = address.port;
+	}
+	return result;
+};
+createSocket.prototype.setBroadcast = function(value){
+	if(this.open4 == true) {
+		this.socket4.setBroadcast(value);
+	}
+	if(this.open6 == true) {
+		this.socket6.setBroadcast(value);
+	}
+};
+createSocket.prototype.setTTL = function(value) {
+	this.socket4.setTTL(value);
+	this.socket6.setTTL(value);
 };
