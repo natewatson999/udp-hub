@@ -26,19 +26,12 @@ var createSocket = function(paramA, paramB){
 	};
 	this.emitter = new events.EventEmitter();
 	self = this;
-	this.socket6 = dgram.createSocket(config6, function(){
-		self.socket4 = dgram.createSocket(config4, function(){
-			self.socket4.setTTL(64);
-			self.socket6.setTTL(64);
-			self.socket6.on("listening", function(){
-				self.open6 = true;
-			});
-			self.socket4.on("listening", function(){
-				self.open4 = true;
-			});
-			callback();
-		});
-	});
+	this.socket4 = dgram.createSocket(config4, callback);
+	this.socket6 = dgram.createSocket(config6, callback);
+	/*
+	this.socket4.setTTL(64);
+	this.socket6.setTTL(64);
+	*/
 	return;
 };
 createSocket.prototype.on = function(condition, callback) {
@@ -64,27 +57,9 @@ createSocket.prototype.close = function(callback) {
 	if(callback) {
 		this.on("close", callback);
 	}
-	var self = this;
-	var end = function(){
-		self.emitter.emit("close");
-	};
-	var kill4 = function(){
-		if(self.open4) {
-			self.open4 = false;
-			self.socket4.close(function(){
-				self.emitter.emit("close");
-			});
-		} else {
-			self.emitter.emit("close");
-		}
-		return;
-	};
-	if (self.open6) {
-		self.open6 = false;
-		self.socket6.close(kill4);
-	} else {
-		kill4();
-	}
+	this.socket4.close();
+	this.socket6.close();
+	this.emitter.emit("close");
 	return;
 };
 createSocket.prototype.send = function(buf, offset, length, port, address, callback) {
@@ -154,32 +129,24 @@ createSocket.prototype.bind = function(paramA, paramB, paramC){
 };
 createSocket.prototype.address = function(){
 	var result = {};
-	if(this.open4 == true) {
-		var address4 = this.socket4.address();
-		result.udp4.address = address4.address;
-		result.udp4.family = address4.family;
-		result.udp4.port = address.port;
-	}
-	if(this.open4 == true) {
-		var address6 = this.socket6.address();
-		result.udp6.address = address6.address;
-		result.udp6.family = address6.family;
-		result.udp6.port = address.port;
-	}
+	var address4 = this.socket4.address();
+	result.udp4.address = address4.address;
+	result.udp4.family = address4.family;
+	result.udp4.port = address.port;
+	var address6 = this.socket6.address();
+	result.udp6.address = address6.address;
+	result.udp6.family = address6.family;
+	result.udp6.port = address.port;
 	return result;
 };
 createSocket.prototype.setBroadcast = function(value){
-	if(this.open4 == true) {
-		this.socket4.setBroadcast(value);
-		if(value==true) {
-			this.socket4.setMulticastTTL(64);
-		}
+	this.socket4.setBroadcast(value);
+	if(value==true) {
+		this.socket4.setMulticastTTL(64);
 	}
-	if(this.open6 == true) {
-		this.socket6.setBroadcast(value);
-		if(value==true) {
-			this.socket6.setMulticastTTL(64);
-		}
+	this.socket6.setBroadcast(value);
+	if(value==true) {
+		this.socket6.setMulticastTTL(64);
 	}
 };
 createSocket.prototype.setTTL = function(value) {
@@ -187,20 +154,12 @@ createSocket.prototype.setTTL = function(value) {
 	this.socket6.setTTL(value);
 };
 createSocket.prototype.setMulticastTTL = function(value) {
-	if(this.open4 == true) {
-		this.socket4.setMulticastTTL(value);
-	}
-	if(this.open6 == true) {
-		this.socket6.setMulticastTTL(value);
-	}
+	this.socket4.setMulticastTTL(value);
+	this.socket6.setMulticastTTL(value);
 };
 createSocket.prototype.setMulticastLoopback = function(value) {
-	if(this.open4 == true) {
-		this.socket4.setMulticastLoopback(value);
-	}
-	if(this.open6 == true) {
-		this.socket6.setMulticastLoopback(value);
-	}
+	this.socket4.setMulticastLoopback(value);
+	this.socket6.setMulticastLoopback(value);
 };
 createSocket.prototype.addMembership = function(address, interface){
 	if (ipFormat(address)=="IPv6") {
