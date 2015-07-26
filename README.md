@@ -239,6 +239,18 @@ This function has one parameter: count. This changes the number of hops a packet
 
 Sets this socket so that it's either capable of broadcasting or not capable of broadcasting. If value is true, then the multicastTTL is reset to 64.
 
+#### udpHub.createSocket.setMulticastTTL(count)
+
+This sets the number of hops a packet emitted from this socket can take, if it's broadcasted. The default is 64. However, some network configurations change hops, so this method is unreliable.
+
+#### udpHub.createSocket.setMulticastLoopback(value)
+
+This takes true or false, and uses this to specify if this socket should receive any packets that it broadcasts.
+
+#### udpHub.createSocket.addMembership(address, interface)
+
+Tells the kernel to join a multicast group.
+
 ### Domain Name related functions
 
 #### udpHub.ipFormat
