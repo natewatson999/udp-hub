@@ -28,10 +28,6 @@ var createSocket = function(paramA, paramB){
 	self = this;
 	this.socket4 = dgram.createSocket(config4, callback);
 	this.socket6 = dgram.createSocket(config6, callback);
-	/*
-	this.socket4.setTTL(64);
-	this.socket6.setTTL(64);
-	*/
 	return;
 };
 createSocket.prototype.on = function(condition, callback) {
@@ -129,15 +125,13 @@ createSocket.prototype.bind = function(paramA, paramB, paramC){
 };
 createSocket.prototype.address = function(){
 	var result = {};
-	var address4 = this.socket4.address();
-	result.udp4.address = address4.address;
-	result.udp4.family = address4.family;
-	result.udp4.port = address.port;
-	var address6 = this.socket6.address();
-	result.udp6.address = address6.address;
-	result.udp6.family = address6.family;
-	result.udp6.port = address.port;
+	result.udp4 = this.socket4.address();
+	result.udp6 = this.socket6.address();
 	return result;
+};
+createSocket.prototype.setTTL = function(value) {
+	this.socket4.setTTL(value);
+	this.socket6.setTTL(value);
 };
 createSocket.prototype.setBroadcast = function(value){
 	this.socket4.setBroadcast(value);
@@ -148,10 +142,6 @@ createSocket.prototype.setBroadcast = function(value){
 	if(value==true) {
 		this.socket6.setMulticastTTL(64);
 	}
-};
-createSocket.prototype.setTTL = function(value) {
-	this.socket4.setTTL(value);
-	this.socket6.setTTL(value);
 };
 createSocket.prototype.setMulticastTTL = function(value) {
 	this.socket4.setMulticastTTL(value);
