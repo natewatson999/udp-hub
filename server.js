@@ -1,57 +1,28 @@
 var dgram = require("dgram");
 var events = require("events");
+var udp = require("./socket.js");
 var ipFormat = require("./addressLogic").ipFormat;
 
 var createServer = function(callback){
-	var self = this;
-	this.server6 = dgram.createSocket("udp6", callback);
-	this.server4 = dgram.createSocket("udp4", callback);
+	this.socket = udp.createSocket(true, callback);
 };
 createServer.prototype.bind = function(port, callback){
-	var self = this;
-	this.server6.bind(port, function(){
-		if (callback) {
-			self.server4.bind(port, callback);
-		} else {
-			self.server4.bind(port);
-		}
-	});
+	this.socket.bind(port, callback);
 };
-createServer.prototype.setTTL = function(count) {
-	this.server6.setTTL(count);
-	this.server4.setTTL(count);
-	return;
+createServer.prototype.setTTL = function(count){
+	this.socket.setTTL(count);
 };
-createServer.prototype.send = function(content, start, end, port, address, callback){
-	if(ipFormat(address) == "IPv6") {
-		if (callback) {
-			this.server6.send(content, start, end, port, address, callback);
-		} else {
-			this.server6.send(content, start, end, port, address);			
-		}
-	} else {
-		if (callback) {
-			this.server4.send(content, start, end, port, address, callback);
-		} else {
-			this.server4.send(content, start, end, port, address);			
-		}
-	}
+createServer.prototype.send = function(content, start, end, port, address, callback) {
+	this.socket.send(content, start, end, port, address, callback);
 };
-createServer.prototype.close = function(callback) {
-	this.server6.close();
-	this.server4.close();
-	if (callback) {
-		callback();
-	}
-	return;
+createServer.prototype.close = function(callback){
+	this.socket.close(callback);
 };
 createServer.prototype.ref = function(){
-	this.server6.ref();
-	this.server4.ref();
+	this.socket.ref();
 };
 createServer.prototype.unref = function(){
-	this.server6.unref();
-	this.server4.unref();
+	this.socket.unref();
 };
 var createClient = function(content, start, end, port, address, callback, hops){
 	var response;
