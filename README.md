@@ -251,6 +251,18 @@ This takes true or false, and uses this to specify if this socket should receive
 
 Tells the kernel to join a multicast group.
 
+#### udpHub.createSocket.dropMembership(address, interface)
+
+Tells the kernel to remove this socket from a multicast group.
+
+#### udpHub.createSocket.ref()
+
+Sets this socket so that if it's the only open socket, the script will continue executing. The default behavior.
+
+#### udpHub.createSocket.unref()
+
+Sets this socket so that if it's still open, but it's the only thing executing, the script can close.
+
 ### Domain Name related functions
 
 #### udpHub.ipFormat
