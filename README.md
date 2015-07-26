@@ -227,6 +227,18 @@ Sends data to address. Buf is a Buffer object, offset is the starting index, len
 
 Returns an object with two values: "udp4" and "udp6". The two are each address objects, as defined in the <a href="https://nodejs.org/api/dgram.html">dgram documentation</a>.
 
+#### udpHub.createSocket.bind(port, address, callback)
+
+Binds this socket so that it's perpetually active. If port is specified, then the socket will listen on that port; and if port is not specified, a port will be randomly assigned from the non-well-known ports "Or as I like to call them, the Dancing With The Stars ports". I advise to have a port specified. If callback is specified, it is to have no parameters, and will be exectued when this socket fires "listening". If address is specified, this socket will ignore all data that doesn't come from this address. I advise against using address. 
+
+#### udpHub.createSocket.setTTL(count)
+
+This function has one parameter: count. This changes the number of hops a packet is allowed to make if it's sent. It can be any integer between 1 and 255. Most systems default to 64. Certain network configurations will change this number on the fly, so this method is not reliable. 
+
+#### udpHub.createSocket.setBroadcast(value)
+
+Sets this socket so that it's either capable of broadcasting or not capable of broadcasting. If value is true, then the multicastTTL is reset to 64.
+
 ### Domain Name related functions
 
 #### udpHub.ipFormat
