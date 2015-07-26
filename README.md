@@ -215,6 +215,18 @@ Emitted when the receiver is closed. Has no parameters.
 
 Emitted when the receiver is listening for both IPv4 and IPv6.
 
+#### udpHub.createSocket.close([callback])
+
+Closes this socket. The callback is turned into a close event listener.
+
+#### udpHub.createSocket.send(buf, offset, length, port, address, callback)
+
+Sends data to address. Buf is a Buffer object, offset is the starting index, length is the size, port is the port being sent on, address is the recipient, and callback is an optional callback. Callback is fired when the Buffer is usable again, and has one parameter: an error object which may result from the send.
+
+#### udpHub.createSocket.address()
+
+Returns an object with two values: "udp4" and "udp6". The two are each address objects, as defined in the <a href="https://nodejs.org/api/dgram.html">dgram documentation</a>.
+
 ### Domain Name related functions
 
 #### udpHub.ipFormat
