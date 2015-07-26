@@ -8,6 +8,7 @@ This module provides the following:
 * client: This is for simple 1-time requests with simple 1-time responses. It's kind of like the get function in the http module, except it's more callback oriented.
 * receiver: This is meant to be as close as feasable to the way dgram lets the developer make clients. It's meant for cases where there may be more than one outward-bound transmission and/or more than one response. 
 * broadcaster: This is for sending broadcasts. 
+* socket: These are as close as possible to the sockets the dgram module provides. This has almost all of the same functions as the dgram module.
 * Some utility functions for dealing with IP addresses.
 
 ## Installation Instructions
@@ -109,7 +110,7 @@ Emitted when there's an error of some kind. Has one parameter: error. The error 
 
 Emitted when the receiver is closed. Has no parameters. 
 
-#### udpHub.createReceiver.emitter.on(listening)
+#### udpHub.createReceiver.emitter.on("listening")
 
 Emitted when the receiver is listening for both IPv4 and IPv6.
 
@@ -193,6 +194,26 @@ Sets this broadcaster to the default behavior: if this broadcaster is still open
 ### udpHub.createBroadcaster.unref()
 
 Sets this broadcaster so that if this broadcaster has the only sockets left running, then the script will end. Non-default, and not recommend. 
+
+### udpHub.createSocket([reuseAddr][, callback])
+
+This function creates a new socket. There are 2 parameters, both of which are optional, but must be in order: reuseAddr and a callback function. When reuseAddr is true, socket.bind() will reuse the address, even if another process has already bound a socket on it. reuseAddr defaults to false. The callback function gets put into an event listener for a message.
+
+#### udpHub.createSocket.emitter.on("message")
+
+Emitted when a response is received. Has two parameters: message and info. These are identical to dgram's message emission.
+
+#### udpHub.createSocket.emitter.on("err")
+
+Emitted when there's an error of some kind. Has one parameter: error. The error object is identical to the ones found in the dgram module.
+
+#### udpHub.createSocket.emitter.on("close")
+
+Emitted when the receiver is closed. Has no parameters. 
+
+#### udpHub.createSocket.emitter.on("listening")
+
+Emitted when the receiver is listening for both IPv4 and IPv6.
 
 ### Domain Name related functions
 
