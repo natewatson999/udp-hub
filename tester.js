@@ -51,3 +51,10 @@ console.log("reached");
 var broadcaster = udp.createBroadcaster(function(){
 	broadcaster.close();
 });
+console.log(udp.addressType("127.0.0.1"));
+console.log(udp.addressType("::1"));
+console.log(udp.addressType("01-23-45-67-89-AB"));
+console.log(udp.addressType("01-23-45-67-89-AB-CD-EF"));
+console.log(udp.addressType("localhost"));
+console.log(udp.addressType("google.com"));
+console.log(udp.addressType("error inducer"));

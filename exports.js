@@ -1,6 +1,8 @@
 var output = {};
 var server = require("./server.js");
-output.ipFormat = require("./addressLogic").ipFormat;
+var addressLogic = require("./addressLogic");
+output.ipFormat = addressLogic.ipFormat;
+output.addressType = addressLogic.addressType;
 output.createServer = server.createServer;
 output.createClient = server.createClient;
 var broadcast = require("./broadcast.js");
