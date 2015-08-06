@@ -1,17 +1,43 @@
 var output = {};
 var punycode = require("punycode");
+output.isDomain = function(address) {
+	if (!address) {
+		return false;
+	}
+	if (address=="localhost") {
+		return true;
+	}
+	var url = punycode.encode(address);
+	if (address.length > 253) {
+		return false;
+	}
+	var segments = address.split(".");
+	if(segments.length < 2) {
+		return false;
+	}
+	var pattern = new RegExp("([A-Z]|[a-z]|[0-9]|_|-)","g");
+	for(var index = 0; index < segments.length; index++) {
+		if (segments[index].length==0) {
+			return false;
+		}
+		if(pattern.test(segments[index])==false) {
+			return false;
+		}
+	}
+	return true;
+};
 output.addressType = function(address) {
 	var VPI8regex = new RegExp("(0|1){8,8}","g");
 	if (VPI8regex.test(address)==true) {
-		return "VPI-UNI"
+		return "VPI-UNI";
 	}
 	var VPI12regex = new RegExp("(0|1){12,12}","g");
 	if (VPI12regex.test(address)==true) {
-		return "VPI-NNI"
+		return "VPI-NNI";
 	}
 	var VPI16regex = new RegExp("(0|1){16,16}","g");
 	if (VPI16regex.test(address)==true) {
-		return "VCI"
+		return "VCI";
 	}
 	var MAC48regex = new RegExp("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$");
 	if (MAC48regex.test(address)==true) {
@@ -29,12 +55,7 @@ output.addressType = function(address) {
 	if ((IPv6regex.test(address))== true) {
 		return "IPv6";
 	}
-	if ("localhost"==address) {
-		return "DNS"
-	}
-	var url = punycode.toASCII(address);
-	var DNSregex = new RegExp("(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})");
-	if (DNSregex.test(url)==true) {
+	if (output.isDomain(address)==true) {
 		return "DNS";
 	}
 	return "unknown";
