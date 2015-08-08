@@ -66,4 +66,32 @@ output.ipFormat = function(address) {
 	}
 	return "IPv4";
 };
+output.get6Addresses = function(domainName, callback) {
+	dns.resolve6(domainName, function(err, results){
+		if (err) {
+			callback([]);
+			return;
+		}
+		callback([results]);
+		return;
+	});
+};
+output.get4Addresses = function(domainName, callback) {
+	dns.resolve4(domainName, function(err, results){
+		if (err) {
+			callback([]);
+			return;
+		}
+		callback([results]);
+		return;
+	});
+};
+output.getAddresses = function(domainName, callback) {
+	output.get6Addresses(domainName, function(result6) {
+		output.get4Addresses(domainName, function(result4){
+			callback(result6.concat(result4));
+		});
+	});
+};
+var dns = require("dns");
 module.exports = exports = output;

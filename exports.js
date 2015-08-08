@@ -11,32 +11,7 @@ output.createBroadcaster = function(callback) {
 };
 output.createReceiver = require("./receive.js").createReceiver;
 output.createSocket = require("./socket.js").createSocket;
-var dns = require("dns");
-output.get6Addresses = function(domainName, callback) {
-	dns.resolve6(domainName, function(err, results){
-		if (err) {
-			callback([]);
-			return;
-		}
-		callback([results]);
-		return;
-	});
-};
-output.get4Addresses = function(domainName, callback) {
-	dns.resolve4(domainName, function(err, results){
-		if (err) {
-			callback([]);
-			return;
-		}
-		callback([results]);
-		return;
-	});
-};
-output.getAddresses = function(domainName, callback) {
-	output.get6Addresses(domainName, function(result6) {
-		output.get4Addresses(domainName, function(result4){
-			callback(result6.concat(result4));
-		});
-	});
-};
+output.get6Addresses = addressLogic.get6Addresses;
+output.get4Addresses = addressLogic.get4Addresses;
+output.getAddresses = addressLogic.getAddresses;
 module.exports = exports = output;
