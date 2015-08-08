@@ -269,6 +269,21 @@ Sets this socket so that if it's still open, but it's the only thing executing, 
 
 This function takes a valid IP address in string form, and returns either "IPv6" or "IPv4".
 
+#### udpHub.addressType
+
+This function takes an address of some type in a string, and returns the type of the address. It may have the following results:
+* "VPI-UNI" 8-bit Virtual Path Identifier
+* "VPI-UNI" 12-bit Virtual Path Identifier
+* "VCI" Virtual Channel Identifier
+* "EUI-48" 48 bit MAC address, the normal kind
+* "EUI-64" 64 bit MAC address, used in certain IPv6 cases and Firewire
+* "IPv4" IPv4 address
+* "IPv6" IPv6 address
+* "DNS" valid domain name
+* "unknown" unknown
+
+"EUI-48" and "EUI-64" are copyrights of the IEEE. 
+
 #### udpHub.get6Addresses
 
 This function takes a valid domain name, and calls a callback function whose parameter is an array of length zero or more, where each value is an IPv6 address associated to the domain in question.
