@@ -1,4 +1,5 @@
-var ipFormat = require("./addressLogic").ipFormat;
+var addressLogic = require("./addressLogic.js");
+var ipFormat = addressLogic.ipFormat;
 var dgram = require("dgram");
 var events = require("events");
 var createSocket = function(paramA, paramB){
@@ -42,6 +43,7 @@ createSocket.prototype.on = function(condition, callback) {
 		case "error":
 			this.socket6.on("error", callback);
 			this.socket4.on("error", callback);
+			this.emitter.on("error", callback);
 			break;
 		case "close":
 			this.emitter.on("close", callback);
@@ -59,10 +61,29 @@ createSocket.prototype.close = function(callback) {
 	return;
 };
 createSocket.prototype.send = function(buf, offset, length, port, address, callback) {
-	if (ipFormat(address)=="IPv6") {
-		this.socket6.send(buf, offset, length, port, address, callback);
-	} else {
-		this.socket4.send(buf, offset, length, port, address, callback);
+	var type = addressLogic.addressType(address);
+	switch (type) {
+		case "IPv4":
+			this.socket4.send(buf, offset, length, port, address, callback);
+			break;
+		case "IPv6":
+			this.socket6.send(buf, offset, length, port, address, callback);
+			break;
+		case "DNS":
+			var self = this;
+			addressLogic.getAddresses(addresses, function(){
+				if (addresses.length == 0) {
+					this.emitter.emit("error", new Error("DNS error"));
+					return;
+				}
+				self.send(buf, offset, length, port, addresses[0], callback);
+			});
+			break;
+		case "EUI-48":
+		case "EUI-64":
+		default:
+			this.emitter.emit("error", new Error("unusableAddressType"));
+			break;
 	}
 };
 createSocket.prototype.bind = function(paramA, paramB, paramC){
@@ -152,33 +173,57 @@ createSocket.prototype.setMulticastLoopback = function(value) {
 	this.socket6.setMulticastLoopback(value);
 };
 createSocket.prototype.addMembership = function(address, interface){
-	if (ipFormat(address)=="IPv6") {
-		if (interface) {
-			this.socket6.addMembership(address, interface);
-		} else {
-			this.socket6.addMembership(address);
-		}
-	} else {
-		if (interface) {
+	var type = addressLogic.addressType(address);
+	switch(type) {
+		case "IPv4":
 			this.socket4.addMembership(address, interface);
-		} else {
-			this.socket4.addMembership(address);
-		}
+			break;
+		case "IPv6":
+			this.socket6.addMembership(address, interface);
+			break;
+		case "DNS":
+			var self = this;
+			addressLogic.getAddresses(addresses, function(){
+				if (addresses.length == 0) {
+					this.emitter.emit("error", new Error("DNS error"));
+					return;
+				}
+				self.addMembership(addresses[0], interface);
+				return;
+			});
+			break;
+		case "EUI-48":
+		case "EUI-64":
+		default:
+			this.emitter.emit("error", new Error("unusableAddressType"));
+			break;
 	}
 };
 createSocket.prototype.dropMembership = function(address, interface){
-	if (ipFormat(address)=="IPv6") {
-		if (interface) {
-			this.socket6.dropMembership(address, interface);
-		} else {
-			this.socket6.dropMembership(address);
-		}
-	} else {
-		if (interface) {
+	var type = addressLogic.addressType(address);
+	switch(type) {
+		case "IPv4":
 			this.socket4.dropMembership(address, interface);
-		} else {
-			this.socket4.dropMembership(address);
-		}
+			break;
+		case "IPv6":
+			this.socket6.dropMembership(address, interface);
+			break;
+		case "DNS":
+			var self = this;
+			addressLogic.getAddresses(addresses, function(){
+				if (addresses.length == 0) {
+					this.emitter.emit("error", new Error("DNS error"));
+					return;
+				}
+				self.dropMembership(addresses[0], interface);
+				return;
+			});
+			break;
+		case "EUI-48":
+		case "EUI-64":
+		default:
+			this.emitter.emit("error", new Error("unusableAddressType"));
+			break;
 	}
 };
 createSocket.prototype.ref = function(){

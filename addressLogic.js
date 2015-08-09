@@ -72,7 +72,7 @@ output.get6Addresses = function(domainName, callback) {
 			callback([]);
 			return;
 		}
-		callback([results]);
+		callback(results);
 		return;
 	});
 };
@@ -82,7 +82,7 @@ output.get4Addresses = function(domainName, callback) {
 			callback([]);
 			return;
 		}
-		callback([results]);
+		callback(results);
 		return;
 	});
 };
