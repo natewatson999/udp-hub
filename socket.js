@@ -187,64 +187,6 @@ createSocket.prototype.bind = function(paramA, paramB, paramC){
 			break;
 	}
 	return;
-	/*
-	var self = this;
-	if (!(paramA)) {
-		this.socket6.bind(function(){
-			self.socket4.bind( function() {
-				self.emitter.emit("listening");
-			});
-		});
-		return;
-	}
-	if (typeof paramA === "function") {
-		this.on("listening", paramA)
-		this.bind();
-		return;
-	}
-	if (paramB) {
-		if(typeof paramB === "function") {
-			this.on("listening", paramB)
-			this.bind(paramA);
-			return;
-		}
-	}
-	if (paramC) {
-		this.on("listening", paramC)
-		this.bind(paramA, paramB);
-		return;
-	}
-	if (paramB) {
-		if(ipFormat(paramB) == "IPv6") {
-			this.socket6.bind(paramA, paramB, function(){
-				self.emitter.emit("listening");
-			});
-		} else {
-			this.socket4.bind(paramA, paramB, function(){
-				self.emitter.emit("listening");
-			});
-		}
-		return;
-	}
-	if (typeof paramA === "number") {
-		this.socket6.bind(paramA, function(){
-			self.socket4.bind(paramA, function(){
-				self.emitter.emit("listening");
-			});
-		});
-		return;
-	}
-	if(ipFormat(paramA) == "IPv6") {
-		this.socket6.bind(paramA, function(){
-			self.emitter.emit("listening");
-		});
-		return;
-	}
-	this.socket4.bind(paramA, function(){
-		self.emitter.emit("listening");
-	});
-	return;
-	*/
 };
 createSocket.prototype.address = function(){
 	var result = {};

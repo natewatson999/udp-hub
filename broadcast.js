@@ -1,5 +1,6 @@
 var output = {};
-var ipFormat = require("./addressLogic").ipFormat;
+var addressLogic =  require("./addressLogic");
+var ipFormat = addressLogic.ipFormat;
 var dgram = require("dgram");
 var createBroadcaster = function(callback){
 	this.server6 = dgram.createSocket("udp6");
@@ -27,11 +28,32 @@ createBroadcaster.prototype.setMulticastTTL = function(value) {
 	this.server4.setMulticastTTL(value);
 };
 createBroadcaster.prototype.broadcast = function(buffer, start, end, port, address, callback){
-	if (ipFormat(address)=="IPv6") {
-		this.server6.send(buffer, start, end, port, address, callback);
-	} else {
-		this.server4.send(buffer, start, end, port, address, callback);		
+	var addressType = addressLogic.addressType(address);
+	switch (addressType) {
+		case "IPv4":
+			this.server4.send(buffer, start, end, port, address, callback);	
+			break;
+		case "IPv6":
+			this.server6.send(buffer, start, end, port, address, callback);	
+			break;
+		case "DNS":
+			var addressCode = addressLogic.getAddresses(addresses, function(){
+				if (addresses.length==0) {
+					callback(new Error("DNSerror"));
+				}
+				var format = addressLogic.ipFormat(addresses[0]);
+				if (format=="IPv6") {
+					this.server6.send(buffer, start, end, port, address, callback);							
+				} else {
+					this.server4.send(buffer, start, end, port, address, callback);			
+				}
+			});
+			break;
+		default:
+			callback(new Error("unusableAddressType"));
+			break;
 	}
+	return;
 };
 createBroadcaster.prototype.setMulticastLoopback = function(value) {
 	this.server6.setMulticastLoopback(value);
