@@ -1,5 +1,5 @@
 # udp-hub
-UDP-hub is a Node.js module designed to provide a module similar to the dgram module that Node provides natively, with the only difference being that dgram requires the developer to handle IPv4 and IPv6, whearas upd-hub is supposed to allow the developer to handle them as one. So rather than making two servers, one for IPv4, and one for IPv6; you can just make one server that can handle both. Note that everything in this module is based on IP addresses. There is no support for NIC addresses, and domain name support is limited. Future versions will have MAC address support. 
+UDP-hub is a Node.js module designed to provide a module similar to the dgram module that Node provides natively, with the only difference being that dgram requires the developer to handle IPv4 and IPv6, whearas upd-hub is supposed to allow the developer to handle them as one. So rather than making two servers, one for IPv4, and one for IPv6; you can just make one server that can handle both. Note that everything in this module is based on IP addresses. There is no support for NIC addresses, and domain name support is in beta. Future versions will have MAC address support. 
 
 This module is published under the MIT license. A working example that uses the basic features can be found in tester.js.
 
@@ -9,7 +9,7 @@ This module provides the following:
 * receiver: This is meant to be as close as feasable to the way dgram lets the developer make clients. It's meant for cases where there may be more than one outward-bound transmission and/or more than one response. 
 * broadcaster: This is for sending broadcasts. 
 * socket: These are as close as possible to the sockets the dgram module provides. This has almost all of the same functions as the dgram module.
-* Some utility functions for dealing with IP addresses.
+* Some utility functions for dealing with various addresses.
 
 ## Installation Instructions
 
@@ -41,7 +41,7 @@ This function binds this server to a port, with an optional callback. There are 
 
 #### udpHub.createServer.send
 
-This function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the size of the response, the response port number, and the IP address "v6 and v4 are both valid" of the intended client. There is an optional 6th parameter: a callback function that is fired when either the response is sent or if there is an error in the response. The function has one parameter: a possibly-null error object.
+This function is intended for responses. It has 5 parameters: a buffer of a response, the starting index of the response, the size of the response, the response port number, and the address "IPv4, IPv6, and DNS addresses are all valid" of the intended client. There is an optional 6th parameter: a callback function that is fired when either the response is sent or if there is an error in the response. The function has one parameter: a possibly-null error object.
 
 #### udpHub.createServer.close
 
@@ -77,7 +77,7 @@ Sets the server so that if this server has the only sockets left running, then t
 
 ### udpHub.createClient
 
-This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; size, the size of the datagram; port, the port the server is supposed to get the message on; address, the intended target "IP only"; callback, the procedure for dealing with the response, if one comes through; and hops, an optional parameter that specifies the number of IP hops allowed. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
+This function takes a message, information about it, sends it, and executes a callback for its response. The parameters are content, a buffer of the actual message; start, the beginning index of the buffer; size, the size of the datagram; port, the port the server is supposed to get the message on; address, the intended target "IPv4, IPv6, and DNS address"; callback, the procedure for dealing with the response, if one comes through; and hops, an optional parameter that specifies the number of IP hops allowed. The parameters of callback are the actual message, which can be treated as a string; info, which is a javascript object with the following attributes: address, family, port, and size; and err, a Javascript error Object.
 
 #### Client Example:
 
