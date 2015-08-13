@@ -124,7 +124,7 @@ This function has one parameter: count. This changes the number of hops a packet
 
 #### udpHub.createReceiver.addMembership
 
-This function adds this receiver to the list of sockets listening to a broadcast address. The broadcast address is either an IPv4 or IPv6 address, given as the zeroth parameter. The last parameter is optional, the multicast interface. 
+This function adds this receiver to the list of sockets listening to a broadcast address. The broadcast address is either an IPv4, DNS, or IPv6 address, given as the zeroth parameter. The last parameter is optional, the multicast interface. 
 
 #### udpHub.createReceiver.dropMembership
 
@@ -132,7 +132,7 @@ This function removes this receiver from the list of sockets listening to a broa
 
 #### udpHub.createReceiver.send
 
-This function is for sending UDP data. The parameters are message, a Buffer of the message; start, the beginning index of the buffer; size, the size of the transmission; port, the port the data is to be sent on; address, the address of the machine that will receive this packet; and callback, an optional function that is fired when the datagram is sent with one paramter: an error object. This is identical to the send function in the dgram module. 
+This function is for sending UDP data. The parameters are message, a Buffer of the message; start, the beginning index of the buffer; size, the size of the transmission; port, the port the data is to be sent on; address, the address of the machine that will receive this packet "IPv4, IPv6, or DNS addresses"; and callback, an optional function that is fired when the datagram is sent with one paramter: an error object. This is identical to the send function in the dgram module. 
 
 ### udpHub.createReceiver.ref()
 
@@ -229,7 +229,7 @@ Returns an object with two values: "udp4" and "udp6". The two are each address o
 
 #### udpHub.createSocket.bind(port, address, callback)
 
-Binds this socket so that it's perpetually active. If port is specified, then the socket will listen on that port; and if port is not specified, a port will be randomly assigned from the non-well-known ports "Or as I like to call them, the Dancing With The Stars ports". I advise to have a port specified. If callback is specified, it is to have no parameters, and will be exectued when this socket fires "listening". If address is specified, this socket will ignore all data that doesn't come from this address. I advise against using address. 
+Binds this socket so that it's perpetually active. If port is specified, then the socket will listen on that port; and if port is not specified, a port will be randomly assigned from the non-well-known ports "Or as I like to call them, the Dancing With The Stars ports". I advise to have a port specified. If callback is specified, it is to have no parameters, and will be exectued when this socket fires "listening". If address is specified, this socket will ignore all data that doesn't come from this address. I advise against using address. Address can be in the forms of DNS, IPv4, or IPv6. 
 
 #### udpHub.createSocket.setTTL(count)
 
