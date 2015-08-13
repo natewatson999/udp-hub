@@ -1,5 +1,5 @@
 var output = {};
-var addressLogic =  require("./addressLogic");
+var addressLogic =  require("./addressLogic.js");
 var ipFormat = addressLogic.ipFormat;
 var dgram = require("dgram");
 var createBroadcaster = function(callback){

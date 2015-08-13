@@ -1,8 +1,8 @@
 var dgram = require("dgram");
 var events = require("events");
 var udp = require("./socket.js");
-var ipFormat = require("./addressLogic").ipFormat;
-
+var addressLogic = require("./addressLogic.js");
+var ipFormat = addressLogic.ipFormat;
 var createServer = function(callback){
 	this.socket = udp.createSocket(true, callback);
 };
@@ -24,14 +24,8 @@ createServer.prototype.ref = function(){
 createServer.prototype.unref = function(){
 	this.socket.unref();
 };
-var createClient = function(content, start, end, port, address, callback, hops){
-	var response;
-	var format = ipFormat(address);
-	if(format == "IPv6") {
-		response = dgram.createSocket("udp6");
-	} else {
-		response = dgram.createSocket("udp4");
-	}
+var createClient = function(content, start, size, port, address, callback, hops){
+	var response = udp.createSocket();
 	if (hops) {
 		response.setTTL(hops);
 	}
@@ -41,13 +35,9 @@ var createClient = function(content, start, end, port, address, callback, hops){
 	});
 	response.on("error", function(err){
 		response.close();
-		if (format == "IPv6") {
-			callback("", {address: "::0", family: format, port: 0, size: 0 }, err);
-		} else {
-			callback("", {address: "0.0.0.0", family: format, port: 0, size: 0 }, err);		
-		}
+		callback("", {address: "::0", family: "unknown", port: 0, size: 0 }, err);		
 	});
-	response.send(content, start, end, port, address);
+	response.send(content, start, size, port, address);
 	return;
 };
 var server = {};
