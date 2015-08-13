@@ -1,5 +1,5 @@
 # udp-hub
-UDP-hub is a Node.js module designed to provide a module similar to the dgram module that Node provides natively, with the only difference being that dgram requires the developer to handle IPv4 and IPv6, whearas upd-hub is supposed to allow the developer to handle them as one. So rather than making two servers, one for IPv4, and one for IPv6; you can just make one server that can handle both. Note that everything in this module is based on IP addresses. There is no internal support for domain names or NIC addresses. However, there is a set of functions for getting IP addresses from domain names, and a future version will have MAC address support. 
+UDP-hub is a Node.js module designed to provide a module similar to the dgram module that Node provides natively, with the only difference being that dgram requires the developer to handle IPv4 and IPv6, whearas upd-hub is supposed to allow the developer to handle them as one. So rather than making two servers, one for IPv4, and one for IPv6; you can just make one server that can handle both. Note that everything in this module is based on IP addresses. There is no support for NIC addresses, and domain name support is limited. Future versions will have MAC address support. 
 
 This module is published under the MIT license. A working example that uses the basic features can be found in tester.js.
 

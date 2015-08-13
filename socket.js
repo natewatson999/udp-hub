@@ -87,6 +87,107 @@ createSocket.prototype.send = function(buf, offset, length, port, address, callb
 	}
 };
 createSocket.prototype.bind = function(paramA, paramB, paramC){
+	if (paramC) {
+		this.on("listening", paramC);
+		this.bind(paramA, paramB);
+		return;
+	}
+	if (paramB) {
+		if (typeof paramB === "function") {
+			this.on("listening", paramB);
+			this.bind(paramA);
+			return;
+		}
+	}
+	if (paramA) {
+		if (typeof paramA === "function") {
+			this.on("listening", paramA);
+			this.bind();
+			return;
+		}
+	}
+	if (!paramA) {
+		var self = this;
+		this.socket6.bind(function(){
+			self.socket4.bind(function(){
+				self.emitter.emit("listening");
+			});
+		});
+		return;
+	}
+	var garbage4 = "203.0.113.1";
+	var garbage6 = "2002:cb00:7100::1";
+	if (!paramB) {
+		if (typeof paramA === "number") {
+			var self = this;
+			this.socket6.bind(paramA, function(){
+				self.socket4.bind(paramA, function(){
+					self.emitter.emit("listening");
+				});
+			});
+			return;
+		} else {
+			var addressType = addressLogic.addressType(paramA);
+			var self = this;
+			switch (addressType) {
+				case "IPv4":
+					this.socket6.bind(garbage6, function(){
+						self.socket4.bind(paramA, function(){
+							self.emitter.emit("listening");
+						});
+					});
+					break;
+				case "IPv6":
+					this.socket6.bind(paramA, function(){
+						self.socket4.bind(garbage4, function(){
+							self.emitter.emit("listening");
+						});
+					});
+					break;
+				case "DNS":
+					this.socket6.bind(paramA, function(){
+						self.socket4.bind(paramA, function(){
+							self.emitter.emit("listening");
+						});
+					});
+					break;
+				default:
+					this.emitter.emit("error", new Error("unusableAddressType"));
+					break;
+			}
+			return;
+		}
+	}
+	var addressType = addressLogic.addressType(paramA);
+	var self = this;
+	switch (addressType) {
+		case "IPv4":
+			this.socket6.bind(paramA, garbage6, function(){
+				self.socket4.bind(paramA, paramB, function(){
+					self.emitter.emit("listening");
+				});
+			});
+			break;
+		case "IPv6":
+			this.socket6.bind(paramA, paramB, function(){
+				self.socket4.bind(paramA, garbage4, function(){
+					self.emitter.emit("listening");
+				});
+			});
+			break;
+		case "DNS":
+			this.socket6.bind(paramA, paramB, function(){
+				self.socket4.bind(paramA, paramB, function(){
+					self.emitter.emit("listening");
+				});
+			});
+			break;
+		default:
+			this.emitter.emit("error", new Error("unusableAddressType"));
+			break;
+	}
+	return;
+	/*
 	var self = this;
 	if (!(paramA)) {
 		this.socket6.bind(function(){
@@ -143,6 +244,7 @@ createSocket.prototype.bind = function(paramA, paramB, paramC){
 		self.emitter.emit("listening");
 	});
 	return;
+	*/
 };
 createSocket.prototype.address = function(){
 	var result = {};
