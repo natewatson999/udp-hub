@@ -49,6 +49,8 @@ createBroadcaster.prototype.broadcast = function(buffer, start, end, port, addre
 				}
 			});
 			break;
+		case "EUI-48":
+		case "EUI-64":
 		default:
 			callback(new Error("unusableAddressType"));
 			break;
