@@ -1,13 +1,13 @@
 {
   "name": "udp-hub",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "An abstraction of the dgram module that is IPv4/v6 agnostic.",
   "main": "exports.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "udp", "dns"
+    "udp", "dns", "IPv4/v6", "IPv4", "IPv6", "Sockets", "server", "client", "Broadcast", "receiver", "addresses"
   ],
   "author": "Nate Watson <natewatson999@gmail.com>",
   "license": "MIT",
